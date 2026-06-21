@@ -242,10 +242,10 @@
       alert("キーワードを入力してください");
       return;
     }
-    // if (!userId) {
-    //   alert("ユーザー情報の取得中です。少し待ってから再度お試しください。");
-    //   return;
-    // }
+    if (!userId) {
+      alert("ユーザー情報の取得中です。少し待ってから再度お試しください。");
+      return;
+    }
     if (!userId) userId = "test_user_pc";
     }
 
