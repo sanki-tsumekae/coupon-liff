@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>クーポン受け取り</title>
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #6dd5ed, #2193b0);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px 24px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  h1 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  p.desc {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 16px;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #2193b0, #6dd5ed);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  button:disabled {
+    opacity: 0.5;
+  }
+  #result {
+    margin-top: 20px;
+  }
+  .coupon-box {
+    background: #fff7e6;
+    border: 2px dashed #ffa726;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .coupon-code {
+    font-size: 22px;
+    font-weight: bold;
+    color: #e65100;
+    letter-spacing: 1px;
+  }
+  .error-box {
+    color: #d32f2f;
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  .loading {
+    color: #999;
+    font-size: 14px;
+  }
+  .confetti {
+    position: fixed;
+    top: -10px;
+    width: 10px;
+    height: 10px;
+    opacity: 0.9;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    to {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0.3;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>🎁 期間限定クーポン 🎁</h1>
+  <p class="desc">SNSの投稿に掲載されているキーワードを入力してください</p>
+
+  <div id="formArea">
+    <input type="text" id="keywordInput" placeholder="キーワードを入力">
+    <button id="submitBtn" onclick="submitKeyword()">送信する</button>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<script>
+  let userId = "";
+  const GAS_API_URL = "GASのURLをここに入れる";
+
+  document.getElementById("result").innerHTML = "<p class='loading'>LIFF初期化中...</p>";
+
+  liff.init({ liffId: "2010460051-Ad6VtlEi" }).then(() => {
+    if (!liff.isLoggedIn()) {
+      liff.login();
+    } else {
+      liff.getProfile().then(profile => {
+        userId = profile.userId;
+        document.getElementById("result").innerHTML = "";
+      }).catch(err => {
+        document.getElementById("result").innerHTML = "<div class='error-box'>プロフィール取得エラー: " + JSON.stringify(err) + "</div>";
+      });
+    }
+  }).catch(err => {
+    document.getElementById("result").innerHTML = "<div class='error-box'>初期化エラー: " + JSON.stringify(err) + "</div>";
+  });
+
+  function submitKeyword() {
+    const keyword = document.getElementById("keywordInput").value.trim();
+    if (!keyword) {
+      alert("キーワードを入力してください");
+      return;
+    }
+    if (!userId) {
+      alert("ユーザー情報の取得中です。少し待ってから再度お試しください。");
+      return;
+    }
+
+    document.getElementById("submitBtn").disabled = true;
+    document.getElementById("result").innerHTML = "<p class='loading'>確認中...</p>";
+
+    fetch(GAS_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ userId: userId, keyword: keyword }),
+      headers: { "Content-Type": "text/plain" }
+    })
+      .then(res => res.json())
+      .then(onResult)
+      .catch(onError);
+  }
+
+  function onResult(res) {
+    document.getElementById("submitBtn").disabled = false;
+
+    if (res.success) {
+      document.getElementById("formArea").style.display = "none";
+      document.getElementById("result").innerHTML = `
+        <div class="coupon-box">
+          <p>🎉 おめでとうございます！🎉</p>
+          <div class="coupon-code">${res.couponCode}</div>
+          <p style="font-size:12px; color:#999; margin-top:10px;">このコードを自社サイトのクーポン欄に入力してください</p>
+        </div>
+      `;
+      launchConfetti();
+    } else {
+      document.getElementById("result").innerHTML = "<div class='error-box'>" + res.message + "</div>";
+    }
+  }
+
+  function onError(err) {
+    document.getElementById("submitBtn").disabled = false;
+    document.getElementById("result").innerHTML = "<div class='error-box'>エラーが発生しました: " + JSON.stringify(err) + "</div>";
+  }
+
+  function launchConfetti() {
+    const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590"];
+    for (let i = 0; i < 60; i++) {
+      const conf = document.createElement("div");
+      conf.className = "confetti";
+      conf.style.left = Math.random() * 100 + "vw";
+      conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+      conf.style.animationDuration = (Math.random() * 2 + 2) + "s";
+      conf.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+      document.body.appendChild(conf);
+      setTimeout(() => conf.remove(), 4000);
+    }
+  }
+</script>
+
+</body>
+</html>
