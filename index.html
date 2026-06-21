@@ -308,32 +308,68 @@
     const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590", "#f8961e", "#43aa8b"];
     const shapes = ["🎉", "✨", "🎊", "⭐"];
 
-    // 紙吹雪（大量）
-    for (let i = 0; i < 60; i++) {
-      const conf = document.createElement("div");
-      conf.className = "confetti";
-      conf.style.left = Math.random() * 100 + "vw";
-      conf.style.background = colors[Math.floor(Math.random() * colors.length)];
-      conf.style.animationDuration = (Math.random() * 2 + 2) + "s";
-      conf.style.animationDelay = (Math.random() * 0.5) + "s";
-      conf.style.width = conf.style.height = (Math.random() * 8 + 6) + "px";
-      conf.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
-      document.body.appendChild(conf);
-      setTimeout(() => conf.remove(), 5000);
-    }
+    // クーポンコードの位置を取得（目標地点）
+    const targetEl = document.getElementById("couponCode");
+    const targetRect = targetEl ? targetEl.getBoundingClientRect() : { left: window.innerWidth/2, top: window.innerHeight/2 };
+    const targetX = targetRect.left + targetRect.width / 2;
+    const targetY = targetRect.top + targetRect.height / 2;
 
-    // 絵文字パーティクル
-    for (let i = 0; i < 10; i++) {
-      const emoji = document.createElement("div");
-      emoji.className = "emoji-particle";
-      emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
-      emoji.style.left = Math.random() * 100 + "vw";
-      emoji.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
-      emoji.style.animationDelay = (Math.random() * 0.5) + "s";
-      emoji.style.fontSize = (Math.random() * 16 + 18) + "px";
-      document.body.appendChild(emoji);
-      setTimeout(() => emoji.remove(), 4000);
-    }
+    // 発射元：左下・右下
+    const origins = [
+      { x: -20, y: window.innerHeight + 20 },               // 左下
+      { x: window.innerWidth + 20, y: window.innerHeight + 20 } // 右下
+    ];
+
+    origins.forEach(origin => {
+      for (let i = 0; i < 35; i++) {
+        const conf = document.createElement("div");
+        conf.className = "confetti-burst";
+        conf.style.left = origin.x + "px";
+        conf.style.top = origin.y + "px";
+        conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+        conf.style.width = conf.style.height = (Math.random() * 8 + 6) + "px";
+        conf.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+
+        // ターゲット付近にランダムなブレを加える
+        const spreadX = targetX + (Math.random() - 0.5) * 300;
+        const spreadY = targetY + (Math.random() - 0.5) * 200;
+
+        // 飛び散った後、さらに重力で落ちる距離
+        const overshootX = (spreadX - origin.x) * 1.4;
+        const overshootY = spreadY - origin.y + 400 + Math.random() * 200;
+
+        conf.style.setProperty('--dx', overshootX + "px");
+        conf.style.setProperty('--dy', overshootY + "px");
+        conf.style.animationDuration = (Math.random() * 0.6 + 1.2) + "s";
+        conf.style.animationDelay = (Math.random() * 0.3) + "s";
+
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 2500);
+      }
+
+      // 絵文字も少し混ぜる
+      for (let i = 0; i < 5; i++) {
+        const emoji = document.createElement("div");
+        emoji.className = "emoji-burst";
+        emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
+        emoji.style.left = origin.x + "px";
+        emoji.style.top = origin.y + "px";
+        emoji.style.fontSize = (Math.random() * 14 + 16) + "px";
+
+        const spreadX = targetX + (Math.random() - 0.5) * 250;
+        const spreadY = targetY + (Math.random() - 0.5) * 150;
+        const overshootX = (spreadX - origin.x) * 1.4;
+        const overshootY = spreadY - origin.y + 400 + Math.random() * 200;
+
+        emoji.style.setProperty('--dx', overshootX + "px");
+        emoji.style.setProperty('--dy', overshootY + "px");
+        emoji.style.animationDuration = (Math.random() * 0.6 + 1.2) + "s";
+        emoji.style.animationDelay = (Math.random() * 0.3) + "s";
+
+        document.body.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 2500);
+      }
+    });
   }
 
   function onError(err) {
