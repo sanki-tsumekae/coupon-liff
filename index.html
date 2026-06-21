@@ -390,8 +390,8 @@
   }
 
   function launchConfettiBurst() {
-    const colors = ["#d4af37", "#f5d98a", "#b8932e", "#fff5d6", "#e8c873", "#fffbe6"];
-    const shapes = ["✨", "🎉", "⭐", "🎊", "💫"];
+    const colors = ["#d4af37", "#f5d98a", "#b8932e", "#fff5d6", "#e8c873"];
+    const shapes = ["✨", "🎉", "⭐", "🎊"];
 
     const targetEl = document.getElementById("couponCode");
     let targetX = window.innerWidth / 2;
@@ -402,142 +402,99 @@
       targetY = rect.top + rect.height / 2;
     }
 
-    // 画面内、下端付近に発射位置を設定（見切れ防止）
-    const originLeft = { x: window.innerWidth * 0.1, y: window.innerHeight * 0.95 };
-    const originRight = { x: window.innerWidth * 0.9, y: window.innerHeight * 0.95 };
+    const originLeft = { x: 0, y: window.innerHeight };
+    const originRight = { x: window.innerWidth, y: window.innerHeight };
 
     burstFrom(originLeft, targetX, targetY, colors, shapes);
-    setTimeout(() => burstFrom(originRight, targetX, targetY, colors, shapes), 80);
-
-    setTimeout(() => sparkleAround(targetX, targetY, colors), 700);
+    burstFrom(originRight, targetX, targetY, colors, shapes);
   }
 
   function burstFrom(origin, targetX, targetY, colors, shapes) {
-    const particleCount = 80;
-
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < 70; i++) {
       const el = document.createElement("div");
-      const kind = Math.random();
-      const isRibbon = kind > 0.7;
-      const isSpark = kind > 0.55 && kind <= 0.7;
-      const size = isRibbon ? (Math.random() * 5 + 7) : (Math.random() * 6 + 4);
+      const isRibbon = Math.random() > 0.6;
+      const size = isRibbon ? (Math.random() * 6 + 8) : (Math.random() * 7 + 5);
 
       el.style.position = "fixed";
       el.style.left = origin.x + "px";
       el.style.top = origin.y + "px";
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
       el.style.zIndex = "999";
       el.style.pointerEvents = "none";
-      el.style.willChange = "transform, opacity";
 
-      if (isSpark) {
-        el.style.width = (size * 0.6) + "px";
-        el.style.height = (size * 0.6) + "px";
-        el.style.background = "#fffbe6";
-        el.style.borderRadius = "50%";
-        el.style.boxShadow = "0 0 6px 1px rgba(255,245,200,0.9)";
-      } else if (isRibbon) {
+      if (isRibbon) {
         el.style.width = size + "px";
-        el.style.height = (size * 2.6) + "px";
+        el.style.height = (size * 2.5) + "px";
         el.style.borderRadius = "2px";
-        el.style.background = colors[Math.floor(Math.random() * colors.length)];
       } else {
         el.style.width = size + "px";
         el.style.height = size + "px";
-        el.style.borderRadius = Math.random() > 0.5 ? "50%" : "1px";
-        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
       }
 
       document.body.appendChild(el);
 
-      const angleSpreadDeg = (Math.random() - 0.5) * 50;
-      const baseAngle = Math.atan2(targetY - origin.y, targetX - origin.x);
-      const angle = baseAngle + (angleSpreadDeg * Math.PI / 180);
-      const power = 420 + Math.random() * 260;
+      const power = 0.8 + Math.random() * 0.8;
+      const spreadX = targetX + (Math.random() - 0.5) * 350;
+      const spreadY = targetY + (Math.random() - 0.5) * 200;
+      const burstDx = (spreadX - origin.x) * power;
+      const burstDy = (spreadY - origin.y) - (250 + Math.random() * 150) * power;
+      const burstDuration = 500 + Math.random() * 300;
 
-      const midX = origin.x + Math.cos(angle) * power;
-      const midY = origin.y + Math.sin(angle) * power;
+      const fallDx = burstDx + (Math.random() - 0.5) * 80;
+      const fallDy = burstDy + 500 + Math.random() * 300;
+      const fallDuration = 1200 + Math.random() * 800;
 
-      const driftX = (Math.random() - 0.5) * 200;
-      const finalX = midX + driftX;
-      const finalY = midY + 480 + Math.random() * 320;
+      const rotateAmount = 360 + Math.random() * 720;
 
-      const upDuration = 600 + Math.random() * 350;
-      const downDuration = 1300 + Math.random() * 900;
-      const totalRotate = 280 + Math.random() * 640;
+      requestAnimationFrame(() => {
+        el.style.transition = `transform ${burstDuration}ms cubic-bezier(0.2, 0.8, 0.3, 1)`;
+        el.style.transform = `translate(${burstDx}px, ${burstDy}px) rotate(${rotateAmount / 2}deg)`;
 
-      el.animate([
-        { transform: `translate(0px,0px) rotate(0deg)`, opacity: 1, offset: 0 },
-        { transform: `translate(${midX - origin.x}px, ${midY - origin.y}px) rotate(${totalRotate * 0.4}deg)`, opacity: 1, offset: upDuration / (upDuration + downDuration) },
-        { transform: `translate(${finalX - origin.x}px, ${finalY - origin.y}px) rotate(${totalRotate}deg)`, opacity: 0, offset: 1 }
-      ], {
-        duration: upDuration + downDuration,
-        easing: "cubic-bezier(0.16, 0.84, 0.44, 1)",
-        fill: "forwards"
+        setTimeout(() => {
+          el.style.transition = `transform ${fallDuration}ms cubic-bezier(0.4, 0, 0.6, 1), opacity ${fallDuration}ms ease-in`;
+          el.style.transform = `translate(${fallDx}px, ${fallDy}px) rotate(${rotateAmount}deg)`;
+          el.style.opacity = "0";
+        }, burstDuration);
       });
 
-      setTimeout(() => el.remove(), upDuration + downDuration + 100);
+      setTimeout(() => el.remove(), burstDuration + fallDuration + 200);
     }
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 6; i++) {
       const emoji = document.createElement("div");
       emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
       emoji.style.position = "fixed";
       emoji.style.left = origin.x + "px";
       emoji.style.top = origin.y + "px";
-      emoji.style.fontSize = (15 + Math.random() * 16) + "px";
+      emoji.style.fontSize = (16 + Math.random() * 14) + "px";
       emoji.style.zIndex = "999";
       emoji.style.pointerEvents = "none";
       document.body.appendChild(emoji);
 
-      const baseAngle = Math.atan2(targetY - origin.y, targetX - origin.x);
-      const angle = baseAngle + ((Math.random() - 0.5) * 40 * Math.PI / 180);
-      const power = 400 + Math.random() * 220;
-      const midX = origin.x + Math.cos(angle) * power;
-      const midY = origin.y + Math.sin(angle) * power;
-      const finalX = midX + (Math.random() - 0.5) * 150;
-      const finalY = midY + 420 + Math.random() * 260;
+      const power = 0.8 + Math.random() * 0.8;
+      const spreadX = targetX + (Math.random() - 0.5) * 280;
+      const spreadY = targetY + (Math.random() - 0.5) * 150;
+      const burstDx = (spreadX - origin.x) * power;
+      const burstDy = (spreadY - origin.y) - (250 + Math.random() * 150) * power;
+      const burstDuration = 500 + Math.random() * 300;
 
-      const upDuration = 600 + Math.random() * 300;
-      const downDuration = 1200 + Math.random() * 700;
+      const fallDx = burstDx + (Math.random() - 0.5) * 60;
+      const fallDy = burstDy + 450 + Math.random() * 250;
+      const fallDuration = 1100 + Math.random() * 700;
 
-      emoji.animate([
-        { transform: `translate(0px,0px) rotate(0deg)`, opacity: 1, offset: 0 },
-        { transform: `translate(${midX - origin.x}px, ${midY - origin.y}px) rotate(160deg)`, opacity: 1, offset: upDuration / (upDuration + downDuration) },
-        { transform: `translate(${finalX - origin.x}px, ${finalY - origin.y}px) rotate(420deg)`, opacity: 0, offset: 1 }
-      ], {
-        duration: upDuration + downDuration,
-        easing: "cubic-bezier(0.16, 0.84, 0.44, 1)",
-        fill: "forwards"
+      requestAnimationFrame(() => {
+        emoji.style.transition = `transform ${burstDuration}ms cubic-bezier(0.2, 0.8, 0.3, 1)`;
+        emoji.style.transform = `translate(${burstDx}px, ${burstDy}px) rotate(180deg)`;
+
+        setTimeout(() => {
+          emoji.style.transition = `transform ${fallDuration}ms cubic-bezier(0.4, 0, 0.6, 1), opacity ${fallDuration}ms ease-in`;
+          emoji.style.transform = `translate(${fallDx}px, ${fallDy}px) rotate(540deg)`;
+          emoji.style.opacity = "0";
+        }, burstDuration);
       });
 
-      setTimeout(() => emoji.remove(), upDuration + downDuration + 100);
-    }
-  }
-
-  function sparkleAround(cx, cy, colors) {
-    for (let i = 0; i < 14; i++) {
-      const el = document.createElement("div");
-      const size = Math.random() * 4 + 2;
-      el.style.position = "fixed";
-      el.style.left = (cx + (Math.random() - 0.5) * 220) + "px";
-      el.style.top = (cy + (Math.random() - 0.5) * 140) + "px";
-      el.style.width = size + "px";
-      el.style.height = size + "px";
-      el.style.borderRadius = "50%";
-      el.style.background = "#fffbe6";
-      el.style.boxShadow = "0 0 8px 2px rgba(255,245,200,0.95)";
-      el.style.zIndex = "999";
-      el.style.pointerEvents = "none";
-      document.body.appendChild(el);
-
-      const duration = 900 + Math.random() * 600;
-      el.animate([
-        { transform: "scale(0) translateY(0px)", opacity: 0, offset: 0 },
-        { transform: "scale(1.2) translateY(-10px)", opacity: 1, offset: 0.4 },
-        { transform: "scale(0.4) translateY(-25px)", opacity: 0, offset: 1 }
-      ], { duration: duration, easing: "ease-out", fill: "forwards" });
-
-      setTimeout(() => el.remove(), duration + 100);
+      setTimeout(() => emoji.remove(), burstDuration + fallDuration + 200);
     }
   }
 
