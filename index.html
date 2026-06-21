@@ -166,14 +166,68 @@
       document.getElementById("formArea").style.display = "none";
       document.getElementById("result").innerHTML = `
         <div class="coupon-box">
-          <p>🎉 おめでとうございます！🎉</p>
-          <div class="coupon-code">${res.couponCode}</div>
+          <p class="congrats">🎉 おめでとうございます！🎉</p>
+          <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
+          <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
           <p style="font-size:12px; color:#999; margin-top:10px;">このコードを自社サイトのクーポン欄に入力してください</p>
         </div>
       `;
       launchConfetti();
+      launchFlash();
     } else {
       document.getElementById("result").innerHTML = "<div class='error-box'>" + res.message + "</div>";
+    }
+  }
+
+  function copyCoupon() {
+    const code = document.getElementById("couponCode").innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      const hint = document.getElementById("copyHint");
+      hint.innerText = "✅ コピーしました！";
+      hint.style.color = "#2e7d32";
+      setTimeout(() => {
+        hint.innerText = "タップしてコピー 📋";
+        hint.style.color = "";
+      }, 2000);
+    });
+  }
+
+  function launchFlash() {
+    const flash = document.createElement("div");
+    flash.className = "flash";
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 500);
+  }
+
+  function launchConfetti() {
+    const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590", "#f8961e", "#43aa8b"];
+    const shapes = ["🎉", "✨", "🎊", "⭐"];
+
+    // 紙吹雪（大量）
+    for (let i = 0; i < 120; i++) {
+      const conf = document.createElement("div");
+      conf.className = "confetti";
+      conf.style.left = Math.random() * 100 + "vw";
+      conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+      conf.style.animationDuration = (Math.random() * 2 + 2) + "s";
+      conf.style.animationDelay = (Math.random() * 0.5) + "s";
+      conf.style.width = conf.style.height = (Math.random() * 8 + 6) + "px";
+      conf.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+      document.body.appendChild(conf);
+      setTimeout(() => conf.remove(), 5000);
+    }
+
+    // 絵文字パーティクル
+    for (let i = 0; i < 20; i++) {
+      const emoji = document.createElement("div");
+      emoji.className = "emoji-particle";
+      emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
+      emoji.style.animationDelay = (Math.random() * 0.5) + "s";
+      emoji.style.fontSize = (Math.random() * 16 + 18) + "px";
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 4000);
     }
   }
 
@@ -182,19 +236,6 @@
     document.getElementById("result").innerHTML = "<div class='error-box'>エラーが発生しました: " + JSON.stringify(err) + "</div>";
   }
 
-  function launchConfetti() {
-    const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590"];
-    for (let i = 0; i < 60; i++) {
-      const conf = document.createElement("div");
-      conf.className = "confetti";
-      conf.style.left = Math.random() * 100 + "vw";
-      conf.style.background = colors[Math.floor(Math.random() * colors.length)];
-      conf.style.animationDuration = (Math.random() * 2 + 2) + "s";
-      conf.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
-      document.body.appendChild(conf);
-      setTimeout(() => conf.remove(), 4000);
-    }
-  }
 </script>
 
 </body>
