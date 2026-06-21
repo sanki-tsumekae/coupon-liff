@@ -334,6 +334,83 @@
     }
   }
 
+  function launchConfettiBurst() {
+    const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590", "#f8961e", "#43aa8b"];
+    const shapes = ["🎉", "✨", "🎊", "⭐"];
+
+    const targetEl = document.getElementById("couponCode");
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    if (targetEl) {
+      const rect = targetEl.getBoundingClientRect();
+      targetX = rect.left + rect.width / 2;
+      targetY = rect.top + rect.height / 2;
+    }
+
+    const originLeft = { x: 0, y: window.innerHeight };
+    const originRight = { x: window.innerWidth, y: window.innerHeight };
+
+    burstFrom(originLeft, targetX, targetY, colors, shapes);
+    burstFrom(originRight, targetX, targetY, colors, shapes);
+  }
+
+  function burstFrom(origin, targetX, targetY, colors, shapes) {
+    for (let i = 0; i < 30; i++) {
+      const el = document.createElement("div");
+      const size = Math.random() * 8 + 6;
+      el.style.position = "fixed";
+      el.style.left = origin.x + "px";
+      el.style.top = origin.y + "px";
+      el.style.width = size + "px";
+      el.style.height = size + "px";
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+      el.style.zIndex = "999";
+      el.style.pointerEvents = "none";
+      document.body.appendChild(el);
+
+      const spreadX = targetX + (Math.random() - 0.5) * 250;
+      const spreadY = targetY + (Math.random() - 0.5) * 150;
+      const dx = (spreadX - origin.x) * 1.3;
+      const dy = (spreadY - origin.y) - 300 + Math.random() * 100;
+      const duration = 1000 + Math.random() * 500;
+
+      requestAnimationFrame(() => {
+        el.style.transition = "transform " + duration + "ms ease-out, opacity " + duration + "ms ease-in";
+        el.style.transform = "translate(" + dx + "px, " + dy + "px) rotate(" + (Math.random() * 720) + "deg)";
+        el.style.opacity = "0.2";
+      });
+
+      setTimeout(() => el.remove(), duration + 300);
+    }
+
+    for (let i = 0; i < 4; i++) {
+      const emoji = document.createElement("div");
+      emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
+      emoji.style.position = "fixed";
+      emoji.style.left = origin.x + "px";
+      emoji.style.top = origin.y + "px";
+      emoji.style.fontSize = (16 + Math.random() * 12) + "px";
+      emoji.style.zIndex = "999";
+      emoji.style.pointerEvents = "none";
+      document.body.appendChild(emoji);
+
+      const spreadX = targetX + (Math.random() - 0.5) * 200;
+      const spreadY = targetY + (Math.random() - 0.5) * 120;
+      const dx = (spreadX - origin.x) * 1.3;
+      const dy = (spreadY - origin.y) - 300 + Math.random() * 100;
+      const duration = 1000 + Math.random() * 500;
+
+      requestAnimationFrame(() => {
+        emoji.style.transition = "transform " + duration + "ms ease-out, opacity " + duration + "ms ease-in";
+        emoji.style.transform = "translate(" + dx + "px, " + dy + "px) rotate(" + (Math.random() * 720) + "deg)";
+        emoji.style.opacity = "0.2";
+      });
+
+      setTimeout(() => emoji.remove(), duration + 300);
+    }
+  }
+  
   function onError(err) {
     document.getElementById("submitBtn").disabled = false;
     document.getElementById("result").innerHTML = "<div class='error-box'>エラーが発生しました: " + JSON.stringify(err) + "</div>";
