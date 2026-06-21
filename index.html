@@ -74,6 +74,12 @@
     font-weight: bold;
     color: #e65100;
     letter-spacing: 1px;
+    cursor: pointer;
+    transition: transform 0.15s;
+    user-select: all;
+  }
+  .coupon-code:active {
+    transform: scale(0.95);
   }
   .error-box {
     color: #d32f2f;
@@ -107,14 +113,6 @@
     0% { transform: scale(0.5); opacity: 0; }
     60% { transform: scale(1.15); opacity: 1; }
     100% { transform: scale(1); }
-  }
-  .coupon-code {
-    cursor: pointer;
-    transition: transform 0.15s;
-    user-select: all;
-  }
-  .coupon-code:active {
-    transform: scale(0.95);
   }
   .copy-hint {
     font-size: 12px;
@@ -277,7 +275,7 @@
           <p style="font-size:12px; color:#999; margin-top:14px;">このコードを自社サイトのクーポン欄に入力してください</p>
         </div>
       `;
-      launchConfetti();
+      launchConfettiBurst();
       launchFlash();
     } else {
       document.getElementById("result").innerHTML = "<div class='error-box'>" + res.message + "</div>";
@@ -302,36 +300,6 @@
     flash.className = "flash";
     document.body.appendChild(flash);
     setTimeout(() => flash.remove(), 500);
-  }
-
-  launchConfettiBurst() {
-    const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590", "#f8961e", "#43aa8b"];
-    const shapes = ["🎉", "✨", "🎊", "⭐"];
-
-    for (let i = 0; i < 60; i++) {
-      const conf = document.createElement("div");
-      conf.className = "confetti";
-      conf.style.left = Math.random() * 100 + "vw";
-      conf.style.background = colors[Math.floor(Math.random() * colors.length)];
-      conf.style.animationDuration = (Math.random() * 2 + 2) + "s";
-      conf.style.animationDelay = (Math.random() * 0.5) + "s";
-      conf.style.width = conf.style.height = (Math.random() * 8 + 6) + "px";
-      conf.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
-      document.body.appendChild(conf);
-      setTimeout(() => conf.remove(), 5000);
-    }
-
-    for (let i = 0; i < 10; i++) {
-      const emoji = document.createElement("div");
-      emoji.className = "emoji-particle";
-      emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
-      emoji.style.left = Math.random() * 100 + "vw";
-      emoji.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
-      emoji.style.animationDelay = (Math.random() * 0.5) + "s";
-      emoji.style.fontSize = (Math.random() * 16 + 18) + "px";
-      document.body.appendChild(emoji);
-      setTimeout(() => emoji.remove(), 4000);
-    }
   }
 
   function launchConfettiBurst() {
@@ -410,12 +378,11 @@
       setTimeout(() => emoji.remove(), duration + 300);
     }
   }
-  
+
   function onError(err) {
     document.getElementById("submitBtn").disabled = false;
     document.getElementById("result").innerHTML = "<div class='error-box'>エラーが発生しました: " + JSON.stringify(err) + "</div>";
   }
-
 </script>
 
 </body>
