@@ -147,6 +147,58 @@
   @keyframes flash-fade {
     to { opacity: 0; }
   }
+  .ticket {
+    background: #fffdf8;
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin-top: 16px;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border: 2px solid #ffb74d;
+    animation: bounce 0.6s ease;
+  }
+  .ticket::before, .ticket::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #6dd5ed;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .ticket::before { left: -12px; }
+  .ticket::after { right: -12px; }
+  .ticket-header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #e65100;
+  }
+  .ticket-divider {
+    border-top: 2px dashed #ffcc80;
+    margin: 14px 0;
+  }
+  .ticket-discount {
+    font-size: 26px;
+    font-weight: 900;
+    color: #d84315;
+    margin-bottom: 14px;
+  }
+  .ticket-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 4px;
+  }
+  .ticket-expiry {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #d32f2f;
+    font-weight: bold;
+    background: #ffebee;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
 </style>
 </head>
 <body>
@@ -214,11 +266,15 @@
     if (res.success) {
       document.getElementById("formArea").style.display = "none";
       document.getElementById("result").innerHTML = `
-        <div class="coupon-box">
-          <p class="congrats">🎉 おめでとうございます！🎉</p>
+        <div class="ticket">
+          <div class="ticket-header">🎉 おめでとうございます！ 🎉</div>
+          <div class="ticket-divider"></div>
+          <div class="ticket-discount">${res.discount || "特典クーポン"}</div>
+          <div class="ticket-label">ご利用コード</div>
           <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
           <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
-          <p style="font-size:12px; color:#999; margin-top:10px;">このコードを自社サイトのクーポン欄に入力してください</p>
+          ${res.expiryText ? `<div class="ticket-expiry">有効期限：${res.expiryText}</div>` : ""}
+          <p style="font-size:12px; color:#999; margin-top:14px;">このコードを自社サイトのクーポン欄に入力してください</p>
         </div>
       `;
       launchConfetti();
