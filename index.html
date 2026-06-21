@@ -199,6 +199,32 @@
     padding: 4px 12px;
     border-radius: 20px;
   }
+  .confetti-burst {
+    position: fixed;
+    opacity: 0.95;
+    animation: burst-fly cubic-bezier(0.15, 0.6, 0.4, 1) forwards;
+    pointer-events: none;
+    z-index: 999;
+  }
+  .emoji-burst {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    animation: burst-fly cubic-bezier(0.15, 0.6, 0.4, 1) forwards;
+  }
+  @keyframes burst-fly {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+      opacity: 1;
+    }
+    60% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--dx), var(--dy)) rotate(540deg);
+      opacity: 0;
+    }
+  }
 </style>
 </head>
 <body>
