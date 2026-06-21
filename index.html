@@ -310,61 +310,30 @@
     const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590", "#f8961e", "#43aa8b"];
     const shapes = ["🎉", "✨", "🎊", "⭐"];
 
-    const targetEl = document.getElementById("couponCode");
-    const targetRect = targetEl ? targetEl.getBoundingClientRect() : { left: window.innerWidth/2, top: window.innerHeight/2, width: 0, height: 0 };
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
-
-    const origins = [
-      { x: -20, y: window.innerHeight + 20 },
-      { x: window.innerWidth + 20, y: window.innerHeight + 20 }
-    ];
-
-    origins.forEach(origin => {
-      for (let i = 0; i < 35; i++) {
-        createBurstParticle(origin, targetX, targetY, colors[Math.floor(Math.random() * colors.length)], false);
-      }
-      for (let i = 0; i < 5; i++) {
-        createBurstParticle(origin, targetX, targetY, null, true, shapes[Math.floor(Math.random() * shapes.length)]);
-      }
-    });
-  }
-
-  function createBurstParticle(origin, targetX, targetY, color, isEmoji, emojiChar) {
-    const el = document.createElement("div");
-    el.style.position = "fixed";
-    el.style.left = origin.x + "px";
-    el.style.top = origin.y + "px";
-    el.style.zIndex = "999";
-    el.style.pointerEvents = "none";
-
-    if (isEmoji) {
-      el.innerText = emojiChar;
-      el.style.fontSize = (Math.random() * 14 + 16) + "px";
-    } else {
-      const size = Math.random() * 8 + 6;
-      el.style.width = size + "px";
-      el.style.height = size + "px";
-      el.style.background = color;
-      el.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+    for (let i = 0; i < 60; i++) {
+      const conf = document.createElement("div");
+      conf.className = "confetti";
+      conf.style.left = Math.random() * 100 + "vw";
+      conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+      conf.style.animationDuration = (Math.random() * 2 + 2) + "s";
+      conf.style.animationDelay = (Math.random() * 0.5) + "s";
+      conf.style.width = conf.style.height = (Math.random() * 8 + 6) + "px";
+      conf.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+      document.body.appendChild(conf);
+      setTimeout(() => conf.remove(), 5000);
     }
 
-    document.body.appendChild(el);
-
-    const spreadX = targetX + (Math.random() - 0.5) * 300;
-    const spreadY = targetY + (Math.random() - 0.5) * 200;
-    const dx = (spreadX - origin.x) * 1.4;
-    const dy = (spreadY - origin.y) + 400 + Math.random() * 200;
-    const duration = Math.random() * 600 + 1200;
-    const delay = Math.random() * 300;
-
-    setTimeout(() => {
-      el.style.transition = `transform ${duration}ms cubic-bezier(0.15, 0.6, 0.4, 1), opacity ${duration}ms ease-out`;
-      el.style.transform = `translate(${dx}px, ${dy}px) rotate(540deg)`;
-      el.style.opacity = "0";
-    }, delay);
-
-    setTimeout(() => el.remove(), duration + delay + 300);
+    for (let i = 0; i < 10; i++) {
+      const emoji = document.createElement("div");
+      emoji.className = "emoji-particle";
+      emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
+      emoji.style.animationDelay = (Math.random() * 0.5) + "s";
+      emoji.style.fontSize = (Math.random() * 16 + 18) + "px";
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 4000);
+    }
   }
 
   function onError(err) {
