@@ -16,6 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-x: hidden;
   }
   .card {
     background: linear-gradient(160deg, #161616 0%, #0a0a0a 100%);
@@ -93,118 +94,161 @@
     letter-spacing: 0.5px;
   }
 
-  /* ===== VIPチケット ===== */
+  .ticket-wrap {
+    margin-top: 20px;
+    animation: ticketSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: drop-shadow(0 18px 30px rgba(0,0,0,0.5));
+  }
+  @keyframes ticketSlide {
+    0% { transform: translateY(-40px) scale(0.9) rotate(-3deg); opacity: 0; }
+    60% { transform: translateY(4px) scale(1.02) rotate(0.5deg); opacity: 1; }
+    100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+  }
   .ticket {
+    display: flex;
     background: linear-gradient(155deg, #1c1c1c 0%, #0c0c0c 100%);
     border-radius: 14px;
-    padding: 30px 22px;
-    margin-top: 18px;
     position: relative;
     border: 1px solid rgba(212,175,55,0.5);
-    box-shadow: 0 0 30px rgba(212,175,55,0.12), inset 0 0 20px rgba(212,175,55,0.04);
-    animation: cardIn 0.7s cubic-bezier(0.2,0.9,0.3,1.1);
     overflow: hidden;
   }
-  .ticket::before {
+  .ticket::after {
     content: "";
     position: absolute;
     top: 0; left: -150%;
-    width: 80%;
+    width: 60%;
     height: 100%;
-    background: linear-gradient(100deg, transparent, rgba(212,175,55,0.18), transparent);
-    animation: shine 2.6s ease-in-out infinite;
+    background: linear-gradient(100deg, transparent, rgba(212,175,55,0.2), transparent);
+    animation: shine 3s ease-in-out infinite;
+    pointer-events: none;
   }
   @keyframes shine {
     0% { left: -150%; }
     50%, 100% { left: 150%; }
   }
-  @keyframes cardIn {
-    0% { transform: scale(0.85) translateY(20px); opacity: 0; }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
+  .ticket-main {
+    flex: 1;
+    padding: 24px 18px 24px 22px;
+    text-align: left;
+    position: relative;
   }
+  .ticket-stub {
+    width: 86px;
+    flex-shrink: 0;
+    padding: 18px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: rgba(212,175,55,0.04);
+  }
+  .ticket-perforation {
+    width: 0;
+    border-left: 2px dashed rgba(212,175,55,0.4);
+    position: relative;
+  }
+  .ticket-perforation::before, .ticket-perforation::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #000;
+    border-radius: 50%;
+    left: -10px;
+  }
+  .ticket-perforation::before { top: -9px; }
+  .ticket-perforation::after { bottom: -9px; }
+
   .ticket-header {
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 3px;
     color: #d4af37;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    opacity: 0.85;
   }
   .ticket-congrats {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: bold;
     color: #f5e6b8;
-    margin-bottom: 18px;
-  }
-  .ticket-divider {
-    border-top: 1px solid rgba(212,175,55,0.3);
-    margin: 0 0 18px 0;
-    position: relative;
-  }
-  .ticket-divider::before, .ticket-divider::after {
-    content: "◆";
-    position: absolute;
-    top: -7px;
-    font-size: 10px;
-    color: #d4af37;
-  }
-  .ticket-divider::before { left: 0; }
-  .ticket-divider::after { right: 0; }
-  .ticket-discount {
-    font-size: 32px;
-    font-weight: 900;
-    background: linear-gradient(135deg, #f5d98a, #d4af37, #f5d98a);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 18px;
-    letter-spacing: 1px;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
   }
   .ticket-label {
-    font-size: 10px;
+    font-size: 9px;
     color: #888;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .coupon-code {
-    font-size: 24px;
+    font-size: 21px;
     font-weight: bold;
     color: #f5e6b8;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     cursor: pointer;
     transition: transform 0.15s;
     user-select: all;
-    padding: 12px 10px;
+    padding: 10px 12px;
     border: 1px dashed rgba(212,175,55,0.5);
     border-radius: 8px;
     background: rgba(212,175,55,0.05);
+    display: inline-block;
   }
   .coupon-code:active { transform: scale(0.96); }
   .copy-hint {
-    font-size: 11px;
+    font-size: 10px;
     color: #d4af37;
-    margin-top: 10px;
+    margin-top: 8px;
     font-weight: bold;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
   }
   .ticket-expiry {
-    margin-top: 16px;
-    font-size: 11px;
+    margin-top: 12px;
+    font-size: 10px;
     color: #e08a8a;
     font-weight: bold;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     background: rgba(255,107,107,0.08);
     border: 1px solid rgba(255,107,107,0.25);
     display: inline-block;
-    padding: 5px 14px;
+    padding: 4px 12px;
     border-radius: 20px;
   }
+
+  .ticket-stub-label {
+    writing-mode: vertical-rl;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #d4af37;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .ticket-barcode {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 38px;
+  }
+  .ticket-barcode div {
+    width: 2px;
+    background: rgba(212,175,55,0.6);
+  }
+  .ticket-num {
+    font-size: 8px;
+    color: #777;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
   .ticket-note {
     font-size: 11px;
     color: #777;
-    margin-top: 18px;
+    margin-top: 16px;
     letter-spacing: 0.3px;
     line-height: 1.6;
+    text-align: center;
   }
 
   .flash {
@@ -277,23 +321,46 @@
       .catch(onError);
   }
 
+  function randomBarcode() {
+    let bars = "";
+    for (let i = 0; i < 14; i++) {
+      const h = Math.floor(Math.random() * 24 + 10);
+      bars += `<div style="height:${h}px"></div>`;
+    }
+    return bars;
+  }
+
+  function randomTicketNum() {
+    return "NO." + Math.floor(Math.random() * 900000 + 100000);
+  }
+
   function onResult(res) {
     document.getElementById("submitBtn").disabled = false;
 
     if (res.success) {
       document.getElementById("formArea").style.display = "none";
       document.getElementById("result").innerHTML = `
-        <div class="ticket">
-          <div class="ticket-header">VIP COUPON</div>
-          <div class="ticket-congrats">🎉 おめでとうございます 🎉</div>
-          <div class="ticket-divider"></div>
-          <div class="ticket-discount">${res.discount || "特典クーポン"}</div>
-          <div class="ticket-label">COUPON CODE</div>
-          <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
-          <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
-          ${res.expiryText ? `<div class="ticket-expiry">有効期限：${res.expiryText}</div>` : ""}
-          <p class="ticket-note">このコードを自社サイトのクーポン欄に入力してください</p>
+        <div class="ticket-wrap">
+          <div class="ticket">
+            <div class="ticket-main">
+              <div class="ticket-header">VIP COUPON</div>
+              <div class="ticket-congrats">🎉 おめでとうございます</div>
+              <div class="ticket-label">割引内容</div>
+              <div style="font-size:26px;font-weight:900;background:linear-gradient(135deg,#f5d98a,#d4af37,#f5d98a);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:14px;">${res.discount || "特典クーポン"}</div>
+              <div class="ticket-label">COUPON CODE</div>
+              <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
+              <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
+              ${res.expiryText ? `<div class="ticket-expiry">有効期限：${res.expiryText}</div>` : ""}
+            </div>
+            <div class="ticket-perforation"></div>
+            <div class="ticket-stub">
+              <div class="ticket-stub-label">SANKI</div>
+              <div class="ticket-barcode">${randomBarcode()}</div>
+              <div class="ticket-num">${randomTicketNum()}</div>
+            </div>
+          </div>
         </div>
+        <p class="ticket-note">このコードを自社サイトのクーポン欄に入力してください</p>
       `;
       launchConfettiBurst();
       launchFlash();
@@ -323,8 +390,8 @@
   }
 
   function launchConfettiBurst() {
-    const colors = ["#d4af37", "#f5d98a", "#b8932e", "#fff5d6", "#e8c873"];
-    const shapes = ["✨", "🎉", "⭐", "🎊"];
+    const colors = ["#d4af37", "#f5d98a", "#b8932e", "#fff5d6", "#e8c873", "#fffbe6"];
+    const shapes = ["✨", "🎉", "⭐", "🎊", "💫"];
 
     const targetEl = document.getElementById("couponCode");
     let targetX = window.innerWidth / 2;
@@ -335,99 +402,141 @@
       targetY = rect.top + rect.height / 2;
     }
 
-    const originLeft = { x: 0, y: window.innerHeight };
-    const originRight = { x: window.innerWidth, y: window.innerHeight };
+    const originLeft = { x: -10, y: window.innerHeight + 10 };
+    const originRight = { x: window.innerWidth + 10, y: window.innerHeight + 10 };
 
     burstFrom(originLeft, targetX, targetY, colors, shapes);
     burstFrom(originRight, targetX, targetY, colors, shapes);
+
+    setTimeout(() => sparkleAround(targetX, targetY, colors), 700);
   }
 
   function burstFrom(origin, targetX, targetY, colors, shapes) {
-    for (let i = 0; i < 70; i++) {
+    const particleCount = 80;
+
+    for (let i = 0; i < particleCount; i++) {
       const el = document.createElement("div");
-      const isRibbon = Math.random() > 0.6;
-      const size = isRibbon ? (Math.random() * 6 + 8) : (Math.random() * 7 + 5);
+      const kind = Math.random();
+      const isRibbon = kind > 0.7;
+      const isSpark = kind > 0.55 && kind <= 0.7;
+      const size = isRibbon ? (Math.random() * 5 + 7) : (Math.random() * 6 + 4);
 
       el.style.position = "fixed";
       el.style.left = origin.x + "px";
       el.style.top = origin.y + "px";
-      el.style.background = colors[Math.floor(Math.random() * colors.length)];
       el.style.zIndex = "999";
       el.style.pointerEvents = "none";
+      el.style.willChange = "transform, opacity";
 
-      if (isRibbon) {
+      if (isSpark) {
+        el.style.width = (size * 0.6) + "px";
+        el.style.height = (size * 0.6) + "px";
+        el.style.background = "#fffbe6";
+        el.style.borderRadius = "50%";
+        el.style.boxShadow = "0 0 6px 1px rgba(255,245,200,0.9)";
+      } else if (isRibbon) {
         el.style.width = size + "px";
-        el.style.height = (size * 2.5) + "px";
+        el.style.height = (size * 2.6) + "px";
         el.style.borderRadius = "2px";
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
       } else {
         el.style.width = size + "px";
         el.style.height = size + "px";
-        el.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+        el.style.borderRadius = Math.random() > 0.5 ? "50%" : "1px";
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
       }
 
       document.body.appendChild(el);
 
-      const power = 0.8 + Math.random() * 0.8;
-      const spreadX = targetX + (Math.random() - 0.5) * 350;
-      const spreadY = targetY + (Math.random() - 0.5) * 200;
-      const burstDx = (spreadX - origin.x) * power;
-      const burstDy = (spreadY - origin.y) - (250 + Math.random() * 150) * power;
-      const burstDuration = 500 + Math.random() * 300;
+      const angleSpreadDeg = (Math.random() - 0.5) * 50;
+      const baseAngle = Math.atan2(targetY - origin.y, targetX - origin.x);
+      const angle = baseAngle + (angleSpreadDeg * Math.PI / 180);
+      const power = 420 + Math.random() * 260;
 
-      const fallDx = burstDx + (Math.random() - 0.5) * 80;
-      const fallDy = burstDy + 500 + Math.random() * 300;
-      const fallDuration = 1200 + Math.random() * 800;
+      const midX = origin.x + Math.cos(angle) * power;
+      const midY = origin.y + Math.sin(angle) * power;
 
-      const rotateAmount = 360 + Math.random() * 720;
+      const driftX = (Math.random() - 0.5) * 200;
+      const finalX = midX + driftX;
+      const finalY = midY + 480 + Math.random() * 320;
 
-      requestAnimationFrame(() => {
-        el.style.transition = `transform ${burstDuration}ms cubic-bezier(0.2, 0.8, 0.3, 1)`;
-        el.style.transform = `translate(${burstDx}px, ${burstDy}px) rotate(${rotateAmount / 2}deg)`;
+      const upDuration = 600 + Math.random() * 350;
+      const downDuration = 1300 + Math.random() * 900;
+      const totalRotate = 280 + Math.random() * 640;
 
-        setTimeout(() => {
-          el.style.transition = `transform ${fallDuration}ms cubic-bezier(0.4, 0, 0.6, 1), opacity ${fallDuration}ms ease-in`;
-          el.style.transform = `translate(${fallDx}px, ${fallDy}px) rotate(${rotateAmount}deg)`;
-          el.style.opacity = "0";
-        }, burstDuration);
+      el.animate([
+        { transform: `translate(0px,0px) rotate(0deg)`, opacity: 1, offset: 0 },
+        { transform: `translate(${midX - origin.x}px, ${midY - origin.y}px) rotate(${totalRotate * 0.4}deg)`, opacity: 1, offset: upDuration / (upDuration + downDuration) },
+        { transform: `translate(${finalX - origin.x}px, ${finalY - origin.y}px) rotate(${totalRotate}deg)`, opacity: 0, offset: 1 }
+      ], {
+        duration: upDuration + downDuration,
+        easing: "cubic-bezier(0.16, 0.84, 0.44, 1)",
+        fill: "forwards"
       });
 
-      setTimeout(() => el.remove(), burstDuration + fallDuration + 200);
+      setTimeout(() => el.remove(), upDuration + downDuration + 100);
     }
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       const emoji = document.createElement("div");
       emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
       emoji.style.position = "fixed";
       emoji.style.left = origin.x + "px";
       emoji.style.top = origin.y + "px";
-      emoji.style.fontSize = (16 + Math.random() * 14) + "px";
+      emoji.style.fontSize = (15 + Math.random() * 16) + "px";
       emoji.style.zIndex = "999";
       emoji.style.pointerEvents = "none";
       document.body.appendChild(emoji);
 
-      const power = 0.8 + Math.random() * 0.8;
-      const spreadX = targetX + (Math.random() - 0.5) * 280;
-      const spreadY = targetY + (Math.random() - 0.5) * 150;
-      const burstDx = (spreadX - origin.x) * power;
-      const burstDy = (spreadY - origin.y) - (250 + Math.random() * 150) * power;
-      const burstDuration = 500 + Math.random() * 300;
+      const baseAngle = Math.atan2(targetY - origin.y, targetX - origin.x);
+      const angle = baseAngle + ((Math.random() - 0.5) * 40 * Math.PI / 180);
+      const power = 400 + Math.random() * 220;
+      const midX = origin.x + Math.cos(angle) * power;
+      const midY = origin.y + Math.sin(angle) * power;
+      const finalX = midX + (Math.random() - 0.5) * 150;
+      const finalY = midY + 420 + Math.random() * 260;
 
-      const fallDx = burstDx + (Math.random() - 0.5) * 60;
-      const fallDy = burstDy + 450 + Math.random() * 250;
-      const fallDuration = 1100 + Math.random() * 700;
+      const upDuration = 600 + Math.random() * 300;
+      const downDuration = 1200 + Math.random() * 700;
 
-      requestAnimationFrame(() => {
-        emoji.style.transition = `transform ${burstDuration}ms cubic-bezier(0.2, 0.8, 0.3, 1)`;
-        emoji.style.transform = `translate(${burstDx}px, ${burstDy}px) rotate(180deg)`;
-
-        setTimeout(() => {
-          emoji.style.transition = `transform ${fallDuration}ms cubic-bezier(0.4, 0, 0.6, 1), opacity ${fallDuration}ms ease-in`;
-          emoji.style.transform = `translate(${fallDx}px, ${fallDy}px) rotate(540deg)`;
-          emoji.style.opacity = "0";
-        }, burstDuration);
+      emoji.animate([
+        { transform: `translate(0px,0px) rotate(0deg)`, opacity: 1, offset: 0 },
+        { transform: `translate(${midX - origin.x}px, ${midY - origin.y}px) rotate(160deg)`, opacity: 1, offset: upDuration / (upDuration + downDuration) },
+        { transform: `translate(${finalX - origin.x}px, ${finalY - origin.y}px) rotate(420deg)`, opacity: 0, offset: 1 }
+      ], {
+        duration: upDuration + downDuration,
+        easing: "cubic-bezier(0.16, 0.84, 0.44, 1)",
+        fill: "forwards"
       });
 
-      setTimeout(() => emoji.remove(), burstDuration + fallDuration + 200);
+      setTimeout(() => emoji.remove(), upDuration + downDuration + 100);
+    }
+  }
+
+  function sparkleAround(cx, cy, colors) {
+    for (let i = 0; i < 14; i++) {
+      const el = document.createElement("div");
+      const size = Math.random() * 4 + 2;
+      el.style.position = "fixed";
+      el.style.left = (cx + (Math.random() - 0.5) * 220) + "px";
+      el.style.top = (cy + (Math.random() - 0.5) * 140) + "px";
+      el.style.width = size + "px";
+      el.style.height = size + "px";
+      el.style.borderRadius = "50%";
+      el.style.background = "#fffbe6";
+      el.style.boxShadow = "0 0 8px 2px rgba(255,245,200,0.95)";
+      el.style.zIndex = "999";
+      el.style.pointerEvents = "none";
+      document.body.appendChild(el);
+
+      const duration = 900 + Math.random() * 600;
+      el.animate([
+        { transform: "scale(0) translateY(0px)", opacity: 0, offset: 0 },
+        { transform: "scale(1.2) translateY(-10px)", opacity: 1, offset: 0.4 },
+        { transform: "scale(0.4) translateY(-25px)", opacity: 0, offset: 1 }
+      ], { duration: duration, easing: "ease-out", fill: "forwards" });
+
+      setTimeout(() => el.remove(), duration + 100);
     }
   }
 
