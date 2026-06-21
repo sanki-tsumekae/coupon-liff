@@ -16,7 +16,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow-x: hidden;
   }
   .card {
     background: linear-gradient(160deg, #161616 0%, #0a0a0a 100%);
@@ -94,161 +93,118 @@
     letter-spacing: 0.5px;
   }
 
-  .ticket-wrap {
-    margin-top: 20px;
-    animation: ticketSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    filter: drop-shadow(0 18px 30px rgba(0,0,0,0.5));
-  }
-  @keyframes ticketSlide {
-    0% { transform: translateY(-40px) scale(0.9) rotate(-3deg); opacity: 0; }
-    60% { transform: translateY(4px) scale(1.02) rotate(0.5deg); opacity: 1; }
-    100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
-  }
+  /* ===== VIPチケット ===== */
   .ticket {
-    display: flex;
     background: linear-gradient(155deg, #1c1c1c 0%, #0c0c0c 100%);
     border-radius: 14px;
+    padding: 30px 22px;
+    margin-top: 18px;
     position: relative;
     border: 1px solid rgba(212,175,55,0.5);
+    box-shadow: 0 0 30px rgba(212,175,55,0.12), inset 0 0 20px rgba(212,175,55,0.04);
+    animation: cardIn 0.7s cubic-bezier(0.2,0.9,0.3,1.1);
     overflow: hidden;
   }
-  .ticket::after {
+  .ticket::before {
     content: "";
     position: absolute;
     top: 0; left: -150%;
-    width: 60%;
+    width: 80%;
     height: 100%;
-    background: linear-gradient(100deg, transparent, rgba(212,175,55,0.2), transparent);
-    animation: shine 3s ease-in-out infinite;
-    pointer-events: none;
+    background: linear-gradient(100deg, transparent, rgba(212,175,55,0.18), transparent);
+    animation: shine 2.6s ease-in-out infinite;
   }
   @keyframes shine {
     0% { left: -150%; }
     50%, 100% { left: 150%; }
   }
-  .ticket-main {
-    flex: 1;
-    padding: 24px 18px 24px 22px;
-    text-align: left;
-    position: relative;
+  @keyframes cardIn {
+    0% { transform: scale(0.85) translateY(20px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
   }
-  .ticket-stub {
-    width: 86px;
-    flex-shrink: 0;
-    padding: 18px 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    background: rgba(212,175,55,0.04);
-  }
-  .ticket-perforation {
-    width: 0;
-    border-left: 2px dashed rgba(212,175,55,0.4);
-    position: relative;
-  }
-  .ticket-perforation::before, .ticket-perforation::after {
-    content: "";
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    background: #000;
-    border-radius: 50%;
-    left: -10px;
-  }
-  .ticket-perforation::before { top: -9px; }
-  .ticket-perforation::after { bottom: -9px; }
-
   .ticket-header {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 3px;
     color: #d4af37;
     text-transform: uppercase;
-    margin-bottom: 8px;
-    opacity: 0.85;
+    margin-bottom: 4px;
   }
   .ticket-congrats {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: bold;
     color: #f5e6b8;
-    margin-bottom: 16px;
-    letter-spacing: 0.3px;
+    margin-bottom: 18px;
+  }
+  .ticket-divider {
+    border-top: 1px solid rgba(212,175,55,0.3);
+    margin: 0 0 18px 0;
+    position: relative;
+  }
+  .ticket-divider::before, .ticket-divider::after {
+    content: "◆";
+    position: absolute;
+    top: -7px;
+    font-size: 10px;
+    color: #d4af37;
+  }
+  .ticket-divider::before { left: 0; }
+  .ticket-divider::after { right: 0; }
+  .ticket-discount {
+    font-size: 32px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #f5d98a, #d4af37, #f5d98a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
   }
   .ticket-label {
-    font-size: 9px;
+    font-size: 10px;
     color: #888;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .coupon-code {
-    font-size: 21px;
+    font-size: 24px;
     font-weight: bold;
     color: #f5e6b8;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     cursor: pointer;
     transition: transform 0.15s;
     user-select: all;
-    padding: 10px 12px;
+    padding: 12px 10px;
     border: 1px dashed rgba(212,175,55,0.5);
     border-radius: 8px;
     background: rgba(212,175,55,0.05);
-    display: inline-block;
   }
   .coupon-code:active { transform: scale(0.96); }
   .copy-hint {
-    font-size: 10px;
+    font-size: 11px;
     color: #d4af37;
-    margin-top: 8px;
+    margin-top: 10px;
     font-weight: bold;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
   }
   .ticket-expiry {
-    margin-top: 12px;
-    font-size: 10px;
+    margin-top: 16px;
+    font-size: 11px;
     color: #e08a8a;
     font-weight: bold;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     background: rgba(255,107,107,0.08);
     border: 1px solid rgba(255,107,107,0.25);
     display: inline-block;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 20px;
   }
-
-  .ticket-stub-label {
-    writing-mode: vertical-rl;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: #d4af37;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-  }
-  .ticket-barcode {
-    display: flex;
-    gap: 2px;
-    align-items: flex-end;
-    height: 38px;
-  }
-  .ticket-barcode div {
-    width: 2px;
-    background: rgba(212,175,55,0.6);
-  }
-  .ticket-num {
-    font-size: 8px;
-    color: #777;
-    letter-spacing: 1px;
-    margin-top: 6px;
-  }
-
   .ticket-note {
     font-size: 11px;
     color: #777;
-    margin-top: 16px;
+    margin-top: 18px;
     letter-spacing: 0.3px;
     line-height: 1.6;
-    text-align: center;
   }
 
   .flash {
@@ -321,46 +277,23 @@
       .catch(onError);
   }
 
-  function randomBarcode() {
-    let bars = "";
-    for (let i = 0; i < 14; i++) {
-      const h = Math.floor(Math.random() * 24 + 10);
-      bars += `<div style="height:${h}px"></div>`;
-    }
-    return bars;
-  }
-
-  function randomTicketNum() {
-    return "NO." + Math.floor(Math.random() * 900000 + 100000);
-  }
-
   function onResult(res) {
     document.getElementById("submitBtn").disabled = false;
 
     if (res.success) {
       document.getElementById("formArea").style.display = "none";
       document.getElementById("result").innerHTML = `
-        <div class="ticket-wrap">
-          <div class="ticket">
-            <div class="ticket-main">
-              <div class="ticket-header">VIP COUPON</div>
-              <div class="ticket-congrats">🎉 おめでとうございます</div>
-              <div class="ticket-label">割引内容</div>
-              <div style="font-size:26px;font-weight:900;background:linear-gradient(135deg,#f5d98a,#d4af37,#f5d98a);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:14px;">${res.discount || "特典クーポン"}</div>
-              <div class="ticket-label">COUPON CODE</div>
-              <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
-              <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
-              ${res.expiryText ? `<div class="ticket-expiry">有効期限：${res.expiryText}</div>` : ""}
-            </div>
-            <div class="ticket-perforation"></div>
-            <div class="ticket-stub">
-              <div class="ticket-stub-label">SANKI</div>
-              <div class="ticket-barcode">${randomBarcode()}</div>
-              <div class="ticket-num">${randomTicketNum()}</div>
-            </div>
-          </div>
+        <div class="ticket">
+          <div class="ticket-header">VIP COUPON</div>
+          <div class="ticket-congrats">🎉 おめでとうございます 🎉</div>
+          <div class="ticket-divider"></div>
+          <div class="ticket-discount">${res.discount || "特典クーポン"}</div>
+          <div class="ticket-label">COUPON CODE</div>
+          <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
+          <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
+          ${res.expiryText ? `<div class="ticket-expiry">有効期限：${res.expiryText}</div>` : ""}
+          <p class="ticket-note">このコードを自社サイトのクーポン欄に入力してください</p>
         </div>
-        <p class="ticket-note">このコードを自社サイトのクーポン欄に入力してください</p>
       `;
       launchConfettiBurst();
       launchFlash();
