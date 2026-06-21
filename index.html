@@ -6,9 +6,10 @@
 <title>クーポン受け取り</title>
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
+  * { box-sizing: border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-    background: linear-gradient(135deg, #6dd5ed, #2193b0);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans", Arial, sans-serif;
+    background: radial-gradient(ellipse at top, #1a1a1a 0%, #000000 70%);
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -17,186 +18,204 @@
     justify-content: center;
   }
   .card {
-    background: white;
-    border-radius: 20px;
-    padding: 30px 24px;
+    background: linear-gradient(160deg, #161616 0%, #0a0a0a 100%);
+    border-radius: 18px;
+    padding: 36px 26px;
     width: 90%;
     max-width: 400px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.3), 0 20px 50px rgba(0,0,0,0.6);
     text-align: center;
+    border: 1px solid rgba(212,175,55,0.4);
+    position: relative;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 12px;
+    pointer-events: none;
   }
   h1 {
-    font-size: 20px;
-    color: #333;
-    margin-bottom: 8px;
+    font-size: 19px;
+    color: #e8c873;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    font-weight: 600;
   }
   p.desc {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 24px;
-    line-height: 1.6;
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 26px;
+    line-height: 1.7;
+    letter-spacing: 0.3px;
   }
   input {
     width: 100%;
-    box-sizing: border-box;
     padding: 14px;
     font-size: 16px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    margin-bottom: 16px;
+    background: #0d0d0d;
+    border: 1px solid rgba(212,175,55,0.35);
+    color: #f0f0f0;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+  }
+  input::placeholder { color: #555; }
+  input:focus {
+    outline: none;
+    border-color: #d4af37;
   }
   button {
     width: 100%;
-    padding: 14px;
-    font-size: 16px;
+    padding: 15px;
+    font-size: 15px;
     font-weight: bold;
-    color: white;
-    background: linear-gradient(135deg, #2193b0, #6dd5ed);
+    color: #0a0a0a;
+    background: linear-gradient(135deg, #f5d98a 0%, #d4af37 50%, #b8932e 100%);
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.3);
   }
-  button:disabled {
-    opacity: 0.5;
-  }
-  #result {
-    margin-top: 20px;
-  }
-  .coupon-box {
-    background: #fff7e6;
-    border: 2px dashed #ffa726;
-    border-radius: 12px;
-    padding: 20px;
+  button:disabled { opacity: 0.4; }
+  #result { margin-top: 22px; }
+  .error-box {
+    color: #ff6b6b;
     margin-top: 16px;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+  .loading {
+    color: #888;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== VIPチケット ===== */
+  .ticket {
+    background: linear-gradient(155deg, #1c1c1c 0%, #0c0c0c 100%);
+    border-radius: 14px;
+    padding: 30px 22px;
+    margin-top: 18px;
+    position: relative;
+    border: 1px solid rgba(212,175,55,0.5);
+    box-shadow: 0 0 30px rgba(212,175,55,0.12), inset 0 0 20px rgba(212,175,55,0.04);
+    animation: cardIn 0.7s cubic-bezier(0.2,0.9,0.3,1.1);
+    overflow: hidden;
+  }
+  .ticket::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -150%;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(212,175,55,0.18), transparent);
+    animation: shine 2.6s ease-in-out infinite;
+  }
+  @keyframes shine {
+    0% { left: -150%; }
+    50%, 100% { left: 150%; }
+  }
+  @keyframes cardIn {
+    0% { transform: scale(0.85) translateY(20px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .ticket-header {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #d4af37;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .ticket-congrats {
+    font-size: 17px;
+    font-weight: bold;
+    color: #f5e6b8;
+    margin-bottom: 18px;
+  }
+  .ticket-divider {
+    border-top: 1px solid rgba(212,175,55,0.3);
+    margin: 0 0 18px 0;
+    position: relative;
+  }
+  .ticket-divider::before, .ticket-divider::after {
+    content: "◆";
+    position: absolute;
+    top: -7px;
+    font-size: 10px;
+    color: #d4af37;
+  }
+  .ticket-divider::before { left: 0; }
+  .ticket-divider::after { right: 0; }
+  .ticket-discount {
+    font-size: 32px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #f5d98a, #d4af37, #f5d98a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+  }
+  .ticket-label {
+    font-size: 10px;
+    color: #888;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
   }
   .coupon-code {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
-    color: #e65100;
-    letter-spacing: 1px;
+    color: #f5e6b8;
+    letter-spacing: 3px;
     cursor: pointer;
     transition: transform 0.15s;
     user-select: all;
+    padding: 12px 10px;
+    border: 1px dashed rgba(212,175,55,0.5);
+    border-radius: 8px;
+    background: rgba(212,175,55,0.05);
   }
-  .coupon-code:active {
-    transform: scale(0.95);
-  }
-  .error-box {
-    color: #d32f2f;
-    margin-top: 16px;
-    font-size: 14px;
-  }
-  .loading {
-    color: #999;
-    font-size: 14px;
-  }
-  .confetti {
-    position: fixed;
-    top: -10px;
-    width: 10px;
-    height: 10px;
-    opacity: 0.9;
-    animation: fall linear forwards;
-  }
-  @keyframes fall {
-    to {
-      transform: translateY(110vh) rotate(360deg);
-      opacity: 0.3;
-    }
-  }
-  .congrats {
-    font-size: 18px;
-    font-weight: bold;
-    animation: bounce 0.6s ease;
-  }
-  @keyframes bounce {
-    0% { transform: scale(0.5); opacity: 0; }
-    60% { transform: scale(1.15); opacity: 1; }
-    100% { transform: scale(1); }
-  }
+  .coupon-code:active { transform: scale(0.96); }
   .copy-hint {
-    font-size: 12px;
-    color: #2193b0;
-    margin-top: 8px;
+    font-size: 11px;
+    color: #d4af37;
+    margin-top: 10px;
     font-weight: bold;
+    letter-spacing: 1px;
   }
-  .emoji-particle {
-    position: fixed;
-    top: -30px;
-    animation: fall-emoji linear forwards;
-    pointer-events: none;
-    z-index: 999;
+  .ticket-expiry {
+    margin-top: 16px;
+    font-size: 11px;
+    color: #e08a8a;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.25);
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
   }
-  @keyframes fall-emoji {
-    to {
-      transform: translateY(110vh) rotate(360deg);
-      opacity: 0.2;
-    }
+  .ticket-note {
+    font-size: 11px;
+    color: #777;
+    margin-top: 18px;
+    letter-spacing: 0.3px;
+    line-height: 1.6;
   }
+
   .flash {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: white;
-    opacity: 0.8;
+    background: radial-gradient(circle, rgba(212,175,55,0.5), transparent 70%);
     z-index: 998;
     pointer-events: none;
-    animation: flash-fade 0.5s ease-out forwards;
+    animation: flash-fade 0.6s ease-out forwards;
   }
-  @keyframes flash-fade {
-    to { opacity: 0; }
-  }
-  .ticket {
-    background: #fffdf8;
-    border-radius: 16px;
-    padding: 24px 20px;
-    margin-top: 16px;
-    position: relative;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    border: 2px solid #ffb74d;
-    animation: bounce 0.6s ease;
-  }
-  .ticket::before, .ticket::after {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: #6dd5ed;
-    border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  .ticket::before { left: -12px; }
-  .ticket::after { right: -12px; }
-  .ticket-header {
-    font-size: 16px;
-    font-weight: bold;
-    color: #e65100;
-  }
-  .ticket-divider {
-    border-top: 2px dashed #ffcc80;
-    margin: 14px 0;
-  }
-  .ticket-discount {
-    font-size: 26px;
-    font-weight: 900;
-    color: #d84315;
-    margin-bottom: 14px;
-  }
-  .ticket-label {
-    font-size: 12px;
-    color: #999;
-    margin-bottom: 4px;
-  }
-  .ticket-expiry {
-    margin-top: 12px;
-    font-size: 13px;
-    color: #d32f2f;
-    font-weight: bold;
-    background: #ffebee;
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-  }
+  @keyframes flash-fade { to { opacity: 0; } }
 </style>
 </head>
 <body>
@@ -265,14 +284,15 @@
       document.getElementById("formArea").style.display = "none";
       document.getElementById("result").innerHTML = `
         <div class="ticket">
-          <div class="ticket-header">🎉 おめでとうございます！ 🎉</div>
+          <div class="ticket-header">VIP COUPON</div>
+          <div class="ticket-congrats">🎉 おめでとうございます 🎉</div>
           <div class="ticket-divider"></div>
           <div class="ticket-discount">${res.discount || "特典クーポン"}</div>
-          <div class="ticket-label">ご利用コード</div>
+          <div class="ticket-label">COUPON CODE</div>
           <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
           <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
           ${res.expiryText ? `<div class="ticket-expiry">有効期限：${res.expiryText}</div>` : ""}
-          <p style="font-size:12px; color:#999; margin-top:14px;">このコードを自社サイトのクーポン欄に入力してください</p>
+          <p class="ticket-note">このコードを自社サイトのクーポン欄に入力してください</p>
         </div>
       `;
       launchConfettiBurst();
@@ -287,7 +307,7 @@
     navigator.clipboard.writeText(code).then(() => {
       const hint = document.getElementById("copyHint");
       hint.innerText = "✅ コピーしました！";
-      hint.style.color = "#2e7d32";
+      hint.style.color = "#7ed957";
       setTimeout(() => {
         hint.innerText = "タップしてコピー 📋";
         hint.style.color = "";
@@ -299,12 +319,12 @@
     const flash = document.createElement("div");
     flash.className = "flash";
     document.body.appendChild(flash);
-    setTimeout(() => flash.remove(), 500);
+    setTimeout(() => flash.remove(), 600);
   }
 
   function launchConfettiBurst() {
-    const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590", "#f8961e", "#43aa8b"];
-    const shapes = ["🎉", "✨", "🎊", "⭐"];
+    const colors = ["#d4af37", "#f5d98a", "#b8932e", "#fff5d6", "#e8c873"];
+    const shapes = ["✨", "🎉", "⭐", "🎊"];
 
     const targetEl = document.getElementById("couponCode");
     let targetX = window.innerWidth / 2;
@@ -323,59 +343,91 @@
   }
 
   function burstFrom(origin, targetX, targetY, colors, shapes) {
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 70; i++) {
       const el = document.createElement("div");
-      const size = Math.random() * 8 + 6;
+      const isRibbon = Math.random() > 0.6;
+      const size = isRibbon ? (Math.random() * 6 + 8) : (Math.random() * 7 + 5);
+
       el.style.position = "fixed";
       el.style.left = origin.x + "px";
       el.style.top = origin.y + "px";
-      el.style.width = size + "px";
-      el.style.height = size + "px";
       el.style.background = colors[Math.floor(Math.random() * colors.length)];
-      el.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
       el.style.zIndex = "999";
       el.style.pointerEvents = "none";
+
+      if (isRibbon) {
+        el.style.width = size + "px";
+        el.style.height = (size * 2.5) + "px";
+        el.style.borderRadius = "2px";
+      } else {
+        el.style.width = size + "px";
+        el.style.height = size + "px";
+        el.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+      }
+
       document.body.appendChild(el);
 
-      const spreadX = targetX + (Math.random() - 0.5) * 250;
-      const spreadY = targetY + (Math.random() - 0.5) * 150;
-      const dx = (spreadX - origin.x) * 1.3;
-      const dy = (spreadY - origin.y) - 300 + Math.random() * 100;
-      const duration = 1000 + Math.random() * 500;
+      const power = 0.8 + Math.random() * 0.8;
+      const spreadX = targetX + (Math.random() - 0.5) * 350;
+      const spreadY = targetY + (Math.random() - 0.5) * 200;
+      const burstDx = (spreadX - origin.x) * power;
+      const burstDy = (spreadY - origin.y) - (250 + Math.random() * 150) * power;
+      const burstDuration = 500 + Math.random() * 300;
+
+      const fallDx = burstDx + (Math.random() - 0.5) * 80;
+      const fallDy = burstDy + 500 + Math.random() * 300;
+      const fallDuration = 1200 + Math.random() * 800;
+
+      const rotateAmount = 360 + Math.random() * 720;
 
       requestAnimationFrame(() => {
-        el.style.transition = "transform " + duration + "ms ease-out, opacity " + duration + "ms ease-in";
-        el.style.transform = "translate(" + dx + "px, " + dy + "px) rotate(" + (Math.random() * 720) + "deg)";
-        el.style.opacity = "0.2";
+        el.style.transition = `transform ${burstDuration}ms cubic-bezier(0.2, 0.8, 0.3, 1)`;
+        el.style.transform = `translate(${burstDx}px, ${burstDy}px) rotate(${rotateAmount / 2}deg)`;
+
+        setTimeout(() => {
+          el.style.transition = `transform ${fallDuration}ms cubic-bezier(0.4, 0, 0.6, 1), opacity ${fallDuration}ms ease-in`;
+          el.style.transform = `translate(${fallDx}px, ${fallDy}px) rotate(${rotateAmount}deg)`;
+          el.style.opacity = "0";
+        }, burstDuration);
       });
 
-      setTimeout(() => el.remove(), duration + 300);
+      setTimeout(() => el.remove(), burstDuration + fallDuration + 200);
     }
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
       const emoji = document.createElement("div");
       emoji.innerText = shapes[Math.floor(Math.random() * shapes.length)];
       emoji.style.position = "fixed";
       emoji.style.left = origin.x + "px";
       emoji.style.top = origin.y + "px";
-      emoji.style.fontSize = (16 + Math.random() * 12) + "px";
+      emoji.style.fontSize = (16 + Math.random() * 14) + "px";
       emoji.style.zIndex = "999";
       emoji.style.pointerEvents = "none";
       document.body.appendChild(emoji);
 
-      const spreadX = targetX + (Math.random() - 0.5) * 200;
-      const spreadY = targetY + (Math.random() - 0.5) * 120;
-      const dx = (spreadX - origin.x) * 1.3;
-      const dy = (spreadY - origin.y) - 300 + Math.random() * 100;
-      const duration = 1000 + Math.random() * 500;
+      const power = 0.8 + Math.random() * 0.8;
+      const spreadX = targetX + (Math.random() - 0.5) * 280;
+      const spreadY = targetY + (Math.random() - 0.5) * 150;
+      const burstDx = (spreadX - origin.x) * power;
+      const burstDy = (spreadY - origin.y) - (250 + Math.random() * 150) * power;
+      const burstDuration = 500 + Math.random() * 300;
+
+      const fallDx = burstDx + (Math.random() - 0.5) * 60;
+      const fallDy = burstDy + 450 + Math.random() * 250;
+      const fallDuration = 1100 + Math.random() * 700;
 
       requestAnimationFrame(() => {
-        emoji.style.transition = "transform " + duration + "ms ease-out, opacity " + duration + "ms ease-in";
-        emoji.style.transform = "translate(" + dx + "px, " + dy + "px) rotate(" + (Math.random() * 720) + "deg)";
-        emoji.style.opacity = "0.2";
+        emoji.style.transition = `transform ${burstDuration}ms cubic-bezier(0.2, 0.8, 0.3, 1)`;
+        emoji.style.transform = `translate(${burstDx}px, ${burstDy}px) rotate(180deg)`;
+
+        setTimeout(() => {
+          emoji.style.transition = `transform ${fallDuration}ms cubic-bezier(0.4, 0, 0.6, 1), opacity ${fallDuration}ms ease-in`;
+          emoji.style.transform = `translate(${fallDx}px, ${fallDy}px) rotate(540deg)`;
+          emoji.style.opacity = "0";
+        }, burstDuration);
       });
 
-      setTimeout(() => emoji.remove(), duration + 300);
+      setTimeout(() => emoji.remove(), burstDuration + fallDuration + 200);
     }
   }
 
