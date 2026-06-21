@@ -98,6 +98,55 @@
       opacity: 0.3;
     }
   }
+  .congrats {
+    font-size: 18px;
+    font-weight: bold;
+    animation: bounce 0.6s ease;
+  }
+  @keyframes bounce {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  .coupon-code {
+    cursor: pointer;
+    transition: transform 0.15s;
+    user-select: all;
+  }
+  .coupon-code:active {
+    transform: scale(0.95);
+  }
+  .copy-hint {
+    font-size: 12px;
+    color: #2193b0;
+    margin-top: 8px;
+    font-weight: bold;
+  }
+  .emoji-particle {
+    position: fixed;
+    top: -30px;
+    animation: fall-emoji linear forwards;
+    pointer-events: none;
+    z-index: 999;
+  }
+  @keyframes fall-emoji {
+    to {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0.2;
+    }
+  }
+  .flash {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: white;
+    opacity: 0.8;
+    z-index: 998;
+    pointer-events: none;
+    animation: flash-fade 0.5s ease-out forwards;
+  }
+  @keyframes flash-fade {
+    to { opacity: 0; }
+  }
 </style>
 </head>
 <body>
