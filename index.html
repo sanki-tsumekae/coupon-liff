@@ -206,7 +206,6 @@
     letter-spacing: 0.3px;
     line-height: 1.6;
   }
-
   .flash {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -216,6 +215,58 @@
     animation: flash-fade 0.6s ease-out forwards;
   }
   @keyframes flash-fade { to { opacity: 0; } }
+ .shop-btn {
+    display: block;
+    margin-top: 18px;
+    padding: 15px;
+    background: linear-gradient(135deg, #f5d98a 0%, #d4af37 50%, #b8932e 100%);
+    color: #0a0a0a;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.4);
+    position: relative;
+    overflow: hidden;
+    animation: btnBounce 1.8s ease-in-out infinite, btnPulse 2.4s ease-in-out infinite;
+  }
+  .shop-btn::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -150%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: btnShine 2s ease-in-out infinite;
+  }
+  .shop-btn::after {
+    content: "→";
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: btnArrow 0.8s ease-in-out infinite alternate;
+  }
+  .shop-btn:active {
+    transform: scale(0.96);
+  }
+  @keyframes btnBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  @keyframes btnPulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(212,175,55,0.4); }
+    50% { box-shadow: 0 4px 28px rgba(212,175,55,0.8), 0 0 20px rgba(212,175,55,0.4); }
+  }
+  @keyframes btnShine {
+    0% { left: -150%; }
+    50%, 100% { left: 150%; }
+  }
+  @keyframes btnArrow {
+    0% { right: 18px; }
+    100% { right: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -292,7 +343,8 @@
           <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
           <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
           ${res.expiryText ? `<div class="ticket-expiry">有効期限：${res.expiryText}</div>` : ""}
-          <p class="ticket-note">このコードを公式通販サイトの<br>クーポン欄に入力してください。<br>※公式通販サイト限定クーポンです。<br>メニューの「公式通販」からご利用ください。</p>
+          <p class="ticket-note">このコードを公式通販サイトのクーポン欄に入力してください。<br>※公式通販サイト限定クーポンです</p>
+          <a href="https://www.sanki-web.net/smartphone/index.html" target="_blank" class="shop-btn">🛒 公式通販サイトでクーポンを使う</a>
         </div>
       `;
       launchConfettiBurst();
