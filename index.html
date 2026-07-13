@@ -304,6 +304,14 @@
     100% { right: 10px; }
   }
 </style>
+ <!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1GLHSY02D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X1GLHSY02D');
+</script>
 </head>
 <body>
 
@@ -379,7 +387,7 @@
           <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
           ${res.expiryText ? `<div class="ticket-expiry">有効期限：${res.expiryText}</div>` : ""}
           <p class="ticket-note">このコードを公式通販サイトの<br>クーポン欄に入力してください。<br>※公式通販サイト限定クーポンです。</p>
-          <a href="https://www.sanki-web.net/smartphone/index.html" target="_blank" class="shop-btn">🛒 公式通販でクーポンを使う</a>
+          <a href="https://www.sanki-web.net/smartphone/index.html" target="_blank" class="shop-btn" onclick="gtag('event', 'shop_button_click', {'event_category': 'coupon', 'event_label': 'shop_button'})">🛒 公式通販でクーポンを使う</a>
         </div>
       `;
       launchConfettiBurst();
@@ -406,6 +414,11 @@
         hint.innerText = "タップしてコピー 📋";
         hint.style.color = "";
       }, 2000);
+    });
+    // アナリティクスにコピーイベントを送信
+    gtag('event', 'coupon_copy', {
+      'event_category': 'coupon',
+      'event_label': 'copy_button'
     });
   }
 
