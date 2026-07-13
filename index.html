@@ -206,14 +206,38 @@
     letter-spacing: 0.3px;
     line-height: 1.6;
   }
+  .coupon-image-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+    background: #000;
+    z-index: 997;
+    cursor: pointer;
+    animation: cardIn 0.5s ease;
+  }
   .coupon-image {
-    width: calc(100% + 44px);
-    margin-left: -22px;
-    margin-top: -30px;
+    width: 100%;
+    border-radius: 12px;
     margin-bottom: 18px;
-    border-radius: 14px 14px 0 0;
     box-shadow: 0 4px 20px rgba(212,175,55,0.2);
     display: block;
+  }
+  .tap-hint {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    color: #f5e6b8;
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    z-index: 998;
+    letter-spacing: 1px;
+    pointer-events: none;
+    animation: cardIn 0.5s ease;
   }
   .flash {
     position: fixed;
@@ -344,8 +368,9 @@
       document.getElementById("formArea").style.display = "none";
       document.getElementById("result").innerHTML = `
         <div class="ticket">
-          <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image">
-          <div class="ticket-discount">${res.discount || "特典クーポン"}</div>
+          <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image-overlay" id="couponImageOverlay" onclick="closeImageOverlay()">
+          <div class="tap-hint" id="tapHint">タップして閉じる ✕</div>
+          <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image" style="display:none;" id="couponImageSmall">
           <div class="ticket-label">COUPON CODE</div>
           <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
           <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
@@ -361,6 +386,15 @@
     }
   }
 
+　function closeImageOverlay() {
+    const overlay = document.getElementById("couponImageOverlay");
+    const hint = document.getElementById("tapHint");
+    const small = document.getElementById("couponImageSmall");
+    if (overlay) overlay.remove();
+    if (hint) hint.remove();
+    if (small) small.style.display = "block";
+  }
+ 
   function copyCoupon() {
     const code = document.getElementById("couponCode").innerText;
     navigator.clipboard.writeText(code).then(() => {
