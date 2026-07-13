@@ -226,18 +226,21 @@
   }
   .tap-hint {
     position: fixed;
-    bottom: 30px;
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0,0,0,0.7);
-    color: #f5e6b8;
-    font-size: 13px;
-    padding: 10px 20px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #f5d98a 0%, #d4af37 50%, #b8932e 100%);
+    color: #0a0a0a;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 14px 28px;
+    border-radius: 30px;
     z-index: 998;
     letter-spacing: 1px;
     pointer-events: none;
-    animation: cardIn 0.5s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.6);
+    animation: cardIn 0.5s ease, btnPulse 2.4s ease-in-out infinite;
   }
   .flash {
     position: fixed;
@@ -369,7 +372,7 @@
       document.getElementById("result").innerHTML = `
         <div class="ticket">
           <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image-overlay" id="couponImageOverlay" onclick="closeImageOverlay()">
-          <div class="tap-hint" id="tapHint">タップして閉じる ✕</div>
+          <div class="tap-hint" id="tapHint">✨ タップして閉じる → クーポンコードをコピー！</div>
           <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image" style="display:none;" id="couponImageSmall">
           <div class="ticket-label">COUPON CODE</div>
           <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
@@ -389,10 +392,8 @@
 　function closeImageOverlay() {
     const overlay = document.getElementById("couponImageOverlay");
     const hint = document.getElementById("tapHint");
-    const small = document.getElementById("couponImageSmall");
     if (overlay) overlay.remove();
     if (hint) hint.remove();
-    if (small) small.style.display = "block";
   }
  
   function copyCoupon() {
