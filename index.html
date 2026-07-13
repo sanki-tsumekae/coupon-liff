@@ -207,10 +207,13 @@
     line-height: 1.6;
   }
   .coupon-image {
-    width: 100%;
-    border-radius: 12px;
+    width: calc(100% + 44px);
+    margin-left: -22px;
+    margin-top: -30px;
     margin-bottom: 18px;
+    border-radius: 14px 14px 0 0;
     box-shadow: 0 4px 20px rgba(212,175,55,0.2);
+    display: block;
   }
   .flash {
     position: fixed;
@@ -278,10 +281,9 @@
 <body>
 
 <div class="card">
-  <h1>🎁 期間限定クーポン 🎁</h1>
-  <p class="desc">SNSの投稿に掲載されているキーワードを入力してください。</p>
-
   <div id="formArea">
+    <h1>🎁 期間限定クーポン 🎁</h1>
+    <p class="desc">SNSの投稿に掲載されているキーワードを入力してください。</p>
     <input type="text" id="keywordInput" placeholder="キーワードを入力">
     <button id="submitBtn" onclick="submitKeyword()">送信する</button>
   </div>
@@ -343,9 +345,6 @@
       document.getElementById("result").innerHTML = `
         <div class="ticket">
           <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image">
-          <div class="ticket-header">VIP COUPON</div>
-          <div class="ticket-congrats">🎉 おめでとうございます 🎉</div>
-          <div class="ticket-divider"></div>
           <div class="ticket-discount">${res.discount || "特典クーポン"}</div>
           <div class="ticket-label">COUPON CODE</div>
           <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
