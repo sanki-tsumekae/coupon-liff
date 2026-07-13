@@ -206,6 +206,12 @@
     letter-spacing: 0.3px;
     line-height: 1.6;
   }
+  .coupon-image {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.2);
+  }
   .flash {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -286,6 +292,7 @@
 <script>
   let userId = "";
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxGO-eJaWiJUO1Us2aP2vPUvlTSW-u7Z2q74NpUZWS2GuZqFrUnXcRwA6zt6hAIQ5lc/exec";
+  const COUPON_IMAGE_URL = "https://sanki-tsumekae.github.io/coupon-liff/coupon-image.png"; // ← 画像アップロード後にファイル名を変更
 
   document.getElementById("result").innerHTML = "<p class='loading'>LIFF初期化中...</p>";
 
@@ -335,6 +342,7 @@
       document.getElementById("formArea").style.display = "none";
       document.getElementById("result").innerHTML = `
         <div class="ticket">
+          <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image">
           <div class="ticket-header">VIP COUPON</div>
           <div class="ticket-congrats">🎉 おめでとうございます 🎉</div>
           <div class="ticket-divider"></div>
