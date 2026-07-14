@@ -377,11 +377,25 @@
 
     if (res.success) {
       document.getElementById("formArea").style.display = "none";
+
+      const useImage = res.imageUrl && res.imageUrl.trim() !== "";
+      const imageHtml = useImage ? `
+          <img src="${res.imageUrl}" alt="クーポン画像" class="coupon-image-overlay" id="couponImageOverlay" onclick="closeImageOverlay()">
+          <div class="tap-hint" id="tapHint">✨ タップして閉じる → クーポンコードをコピー！</div>
+          <img src="${res.imageUrl}" alt="クーポン画像" class="coupon-image" style="display:none;" id="couponImageSmall">
+      ` : "";
+
+      const ticketHeaderHtml = useImage ? "" : `
+          <div class="ticket-header">VIP COUPON</div>
+          <div class="ticket-congrats">🎉 おめでとうございます 🎉</div>
+          <div class="ticket-divider"></div>
+          <div class="ticket-discount">${res.discount || "特典クーポン"}</div>
+      `;
+
       document.getElementById("result").innerHTML = `
         <div class="ticket">
-          <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image-overlay" id="couponImageOverlay" onclick="closeImageOverlay()">
-          <div class="tap-hint" id="tapHint">✨ タップして閉じる → クーポンコードをコピー！</div>
-          <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image" style="display:none;" id="couponImageSmall">
+          ${imageHtml}
+          ${ticketHeaderHtml}
           <div class="ticket-label">COUPON CODE</div>
           <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
           <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
