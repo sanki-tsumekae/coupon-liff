@@ -367,8 +367,8 @@
             document.getElementById("result").innerHTML = "";
           }
         })
-        .catch(() => {
-          document.getElementById("result").innerHTML = "";
+        .catch((err) => {
+          document.getElementById("result").innerHTML = "<div class='error-box'>エラー: " + JSON.stringify(err) + "</div>";
         });
       })
       }).catch(err => {
