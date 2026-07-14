@@ -334,20 +334,19 @@
   document.getElementById("result").innerHTML = "<p class='loading'>LIFF初期化中...</p>";
 
   liff.init({ liffId: "2010460051-Ad6VtlEi" }).then(() => {
-    if (!liff.isLoggedIn()) {
-      liff.login();
-    } else {
-      liff.getProfile().then(profile => {
-        userId = profile.userId;
-        document.getElementById("result").innerHTML = "";
-      })
-      }).catch(err => {
-        document.getElementById("result").innerHTML = "<div class='error-box'>プロフィール取得エラー: " + JSON.stringify(err) + "</div>";
-      });
-    }
-  }).catch(err => {
-    document.getElementById("result").innerHTML = "<div class='error-box'>初期化エラー: " + JSON.stringify(err) + "</div>";
-  });
+  if (!liff.isLoggedIn()) {
+    liff.login();
+  } else {
+    liff.getProfile().then(profile => {
+      userId = profile.userId;
+      document.getElementById("result").innerHTML = "";
+    }).catch(err => {
+      document.getElementById("result").innerHTML = "<div class='error-box'>プロフィール取得エラー: " + JSON.stringify(err) + "</div>";
+    });
+  }
+}).catch(err => {
+  document.getElementById("result").innerHTML = "<div class='error-box'>初期化エラー: " + JSON.stringify(err) + "</div>";
+});
 
   function submitKeyword() {
     const keyword = document.getElementById("keywordInput").value.trim();
@@ -412,7 +411,7 @@
     }
   }
 
-　function closeImageOverlay() {
+  function closeImageOverlay() {
     const overlay = document.getElementById("couponImageOverlay");
     const hint = document.getElementById("tapHint");
     if (overlay) overlay.remove();
