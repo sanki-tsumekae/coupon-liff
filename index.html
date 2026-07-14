@@ -328,25 +328,39 @@
 
 <script>
   let userId = "";
+  const COMING_SOON = true; // ← 公開時にfalseへ変更するだけ
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxGO-eJaWiJUO1Us2aP2vPUvlTSW-u7Z2q74NpUZWS2GuZqFrUnXcRwA6zt6hAIQ5lc/exec";
   const COUPON_IMAGE_URL = "https://sanki-tsumekae.github.io/coupon-liff/S__34807860.jpg"; // ← 画像アップロード後にファイル名を変更
 
+  if (COMING_SOON) {
+  document.getElementById("formArea").innerHTML = `
+    <div class="ticket-header">COMING SOON</div>
+    <h1>🎁 クーポン配布 準備中 🎁</h1>
+    <div class="ticket-divider" style="margin:18px 0;"></div>
+    <p class="desc">
+      期間限定クーポンの配布を準備しています。<br>
+      公開まで今しばらくお待ちください。<br><br>
+      最新情報は公式SNSでお知らせします！
+    </p>
+  `;
+} else {
   document.getElementById("result").innerHTML = "<p class='loading'>LIFF初期化中...</p>";
 
   liff.init({ liffId: "2010460051-Ad6VtlEi" }).then(() => {
-  if (!liff.isLoggedIn()) {
-    liff.login();
-  } else {
-    liff.getProfile().then(profile => {
-      userId = profile.userId;
-      document.getElementById("result").innerHTML = "";
-    }).catch(err => {
-      document.getElementById("result").innerHTML = "<div class='error-box'>プロフィール取得エラー: " + JSON.stringify(err) + "</div>";
-    });
-  }
-}).catch(err => {
-  document.getElementById("result").innerHTML = "<div class='error-box'>初期化エラー: " + JSON.stringify(err) + "</div>";
-});
+    if (!liff.isLoggedIn()) {
+      liff.login();
+    } else {
+      liff.getProfile().then(profile => {
+        userId = profile.userId;
+        document.getElementById("result").innerHTML = "";
+      }).catch(err => {
+        document.getElementById("result").innerHTML = "<div class='error-box'>プロフィール取得エラー: " + JSON.stringify(err) + "</div>";
+      });
+    }
+  }).catch(err => {
+    document.getElementById("result").innerHTML = "<div class='error-box'>初期化エラー: " + JSON.stringify(err) + "</div>";
+  });
+}
 
   function submitKeyword() {
     const keyword = document.getElementById("keywordInput").value.trim();
