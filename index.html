@@ -339,39 +339,7 @@
     } else {
       liff.getProfile().then(profile => {
         userId = profile.userId;
-
-        fetch(GAS_API_URL, {
-          method: "POST",
-          body: JSON.stringify({ userId: userId, keyword: "__check__" }),
-          headers: { "Content-Type": "text/plain" }
-        })
-        .then(res => res.json())
-        .then(res => {
-          document.getElementById("result").innerHTML = "<div class='error-box'>" + JSON.stringify(res) + "</div>";
-          if (res.comingSoon) {
-            document.getElementById("formArea").style.display = "none";
-            document.getElementById("result").innerHTML = `
-              <div class="ticket" style="text-align:center;">
-                <div class="ticket-header">COMING SOON</div>
-                <div style="font-size:40px; margin: 16px 0;">🎁</div>
-                <div style="font-size:18px; font-weight:bold; color:#f5e6b8; margin-bottom:12px;">
-                  期間限定クーポン<br>近日公開予定！
-                </div>
-                <div class="ticket-divider"></div>
-                <div style="font-size:12px; color:#999; line-height:1.8; margin-bottom:16px;">
-                  SNSをフォローして<br>キーワードをいち早くゲットしよう！
-                </div>
-                <a href="https://www.sanki-web.net/smartphone/index.html" target="_blank" class="shop-btn">🛒 公式通販サイトはこちら</a>
-              </div>
-            `;
-          } else {
-            document.getElementById("result").innerHTML = "";
-          }
-        })
-        .catch((err) => {
-          document.getElementById("result").innerHTML = "<div class='error-box'>エラー: " + JSON.stringify(err) + "</div>";
-        });
-      })
+        document.getElementById("result").innerHTML = "";
       }).catch(err => {
         document.getElementById("result").innerHTML = "<div class='error-box'>プロフィール取得エラー: " + JSON.stringify(err) + "</div>";
       });
@@ -409,25 +377,11 @@
 
     if (res.success) {
       document.getElementById("formArea").style.display = "none";
-
-      const useImage = res.imageUrl && res.imageUrl.trim() !== "";
-      const imageHtml = useImage ? `
-          <img src="${res.imageUrl}" alt="クーポン画像" class="coupon-image-overlay" id="couponImageOverlay" onclick="closeImageOverlay()">
-          <div class="tap-hint" id="tapHint">✨ タップして閉じる → クーポンコードをコピー！</div>
-          <img src="${res.imageUrl}" alt="クーポン画像" class="coupon-image" style="display:none;" id="couponImageSmall">
-      ` : "";
-
-      const ticketHeaderHtml = useImage ? "" : `
-          <div class="ticket-header">VIP COUPON</div>
-          <div class="ticket-congrats">🎉 おめでとうございます 🎉</div>
-          <div class="ticket-divider"></div>
-          <div class="ticket-discount">${res.discount || "特典クーポン"}</div>
-      `;
-
       document.getElementById("result").innerHTML = `
         <div class="ticket">
-          ${imageHtml}
-          ${ticketHeaderHtml}
+          <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image-overlay" id="couponImageOverlay" onclick="closeImageOverlay()">
+          <div class="tap-hint" id="tapHint">✨ タップして閉じる → クーポンコードをコピー！</div>
+          <img src="${COUPON_IMAGE_URL}" alt="クーポン画像" class="coupon-image" style="display:none;" id="couponImageSmall">
           <div class="ticket-label">COUPON CODE</div>
           <div class="coupon-code" id="couponCode" onclick="copyCoupon()">${res.couponCode}</div>
           <p class="copy-hint" id="copyHint">タップしてコピー 📋</p>
