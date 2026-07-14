@@ -347,6 +347,7 @@
         })
         .then(res => res.json())
         .then(res => {
+          document.getElementById("result").innerHTML = "<div class='error-box'>" + JSON.stringify(res) + "</div>";
           if (res.comingSoon) {
             document.getElementById("formArea").style.display = "none";
             document.getElementById("result").innerHTML = `
