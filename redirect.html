@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>移動中...</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1GLHSY02D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X1GLHSY02D');
+
+  const destinations = {
+    "amazon":   "https://www.amazon.co.jp/stores/詰め替えそのまま/page/5DDA18A2-7519-443E-ADF4-40ED44F7E163?lp_asin=B0BNN4M6C2&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto",
+    "rakuten":  "https://www.rakuten.co.jp/sanki-shop",
+    "yahoo":    "https://store.shopping.yahoo.co.jp/tsumekaesanki/",
+    "shop":     "https://www.sanki-web.net/smartphone/index.html",
+    "instagram":"https://www.instagram.com/tsumekae_official?igsh=MWtqMG84cDNpbnY5dA==",
+    "tiktok":   "https://www.tiktok.com/@tsumekae_official?_r=1&_t=ZS-97GIKUUlOGV",
+    "facebook": "https://www.facebook.com/share/1EQAto9BBq/?mibextid=wwXIfr"
+  };
+
+  const params = new URLSearchParams(location.search);
+  const key = params.get("to");
+  const url = destinations[key];
+
+  if (url) {
+    gtag('event', 'richmenu_click', {
+      'event_category': 'richmenu',
+      'event_label': key,
+      'event_callback': () => { location.replace(url); }
+    });
+    setTimeout(() => location.replace(url), 800);
+  } else {
+    location.replace("https://www.sanki-web.net/smartphone/index.html");
+  }
+</script>
+</head>
+<body></body>
+</html>
