@@ -29,7 +29,7 @@
       'event_label': key,
       'event_callback': () => { location.replace(url); }
     });
-    new Image().src = LOG_URL + "?button=" + encodeURIComponent(key) + "&env=" + LOG_ENV;
+    navigator.sendBeacon(LOG_URL + "?button=" + encodeURIComponent(key) + "&env=" + LOG_ENV);
     setTimeout(() => location.replace(url), 800);
   } else {
     location.replace("https://www.sanki-web.net/smartphone/index.html");
