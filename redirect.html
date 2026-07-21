@@ -9,7 +9,8 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-X1GLHSY02D');
-  const LOG_URL = "13Wu-KpPYPnkmhsNDgzK9X-OX3Ca7BaMe4-qc5hOhU7c";
+  const LOG_URL = "https://script.google.com/macros/s/AKfycby46vJkp7WQroE2MzohFAWvf5BumLaBfzBmMLfXyRhdvhtkuFW5mOC4EXPKKqPTtAcn/exec";
+  const LOG_ENV = "demo";
   const destinations = {
     "amazon":   "https://www.amazon.co.jp/stores/詰め替えそのまま/page/5DDA18A2-7519-443E-ADF4-40ED44F7E163?lp_asin=B0BNN4M6C2&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto",
     "rakuten":  "https://www.rakuten.co.jp/sanki-shop",
@@ -28,7 +29,7 @@
       'event_label': key,
       'event_callback': () => { location.replace(url); }
     });
-    new Image().src = LOG_URL + "?button=" + encodeURIComponent(key);
+    new Image().src = LOG_URL + "?button=" + encodeURIComponent(key) + "&env=" + LOG_ENV;
     setTimeout(() => location.replace(url), 800);
   } else {
     location.replace("https://www.sanki-web.net/smartphone/index.html");
